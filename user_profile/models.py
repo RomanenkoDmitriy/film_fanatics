@@ -7,7 +7,7 @@ class UserProfile(models.Model):
     image_profile = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    nickname = models.CharField(max_length=100, null=True, blank=True)
+    nickname = models.CharField(max_length=100, null=True, blank=True, unique=True)
     birth_date = models.DateField()
     gender = models.CharField(max_length=100)
     preferences = models.CharField(max_length=150)

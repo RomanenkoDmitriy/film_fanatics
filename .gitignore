@@ -1,3 +1,5 @@
 .idea
 .venv
-config/__pycache__
+config/__pycache__/settings.cpython-311.pyc
+config/__pycache__/urls.cpython-311.pyc
+user_profile/__pycache__
