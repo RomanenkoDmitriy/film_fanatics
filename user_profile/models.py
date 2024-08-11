@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from film.models import Genre
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -10,7 +12,7 @@ class UserProfile(models.Model):
     nickname = models.CharField(max_length=100, null=True, blank=True, unique=True)
     birth_date = models.DateField()
     gender = models.CharField(max_length=100)
-    preferences = models.CharField(max_length=150)
+    preferences = models.ManyToManyField(Genre)
     favorite_movie = models.CharField(max_length=200, null=True, blank=True)
     favorite_genre = models.CharField(max_length=50, null=True, blank=True)
     favorite_actor = models.CharField(max_length=300, null=True, blank=True)
