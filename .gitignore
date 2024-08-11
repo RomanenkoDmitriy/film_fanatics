@@ -1,3 +1,11 @@
 .idea
 .venv
-
+config/__pycache__
+user_profile/__pycache__
+film/migrations/__pycache__
+film/__pycache__
+user_profile/migrations/__pycache__
+config/__pycache__/settings.cpython-311.pyc
+config/__pycache__/urls.cpython-311.pyc
+user_profile/__pycache__/admin.cpython-311.pyc
+user_profile/__pycache__/models.cpython-311.pyc
