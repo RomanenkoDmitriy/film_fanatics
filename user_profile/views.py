@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.models import User
 from django.views.generic import CreateView, View
 from django.contrib import messages
 from django.contrib.auth import login
 
-from user_profile.forms import RegistrationForm
+from user_profile.forms import RegistrationForm, UserProfileForm
+from user_profile.models import UserProfile
 
 
 class RegisterView(CreateView):
@@ -34,5 +36,40 @@ class RegisterView(CreateView):
             return render(request, self.template_name, {'form': self.form_class})
 
 
-class UserProfileView(View):
+class UserProfileView(LoginRequiredMixin, View):
+    model = UserProfile
+    template_name = 'user_profile.html'
+    form_class = UserProfileForm
+    http_method_names = ['get', 'post']
+    login_url = 'login'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'form': self.form_class})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            profile = UserProfile.objects.create(
+                user=request.user, image_profile=form.cleaned_data['image_profile'],
+                first_name=form.cleaned_data['first_name'],
+                last_name=form.cleaned_data['last_name'],
+                nickname=form.cleaned_data['nickname'],
+                birth_date=form.cleaned_data['birth_date'],
+                gender=form.cleaned_data['gender'],
+                favorite_actor=form.cleaned_data['favorite_actor'],
+                favorite_genre=form.cleaned_data['favorite_genre'],
+                favorite_movie=form.cleaned_data['favorite_movie'],
+            )
+            try:
+                profile.preferences.set(form.cleaned_data['preferences'])
+            except (TypeError, ValueError):
+                profile.delete()
+            profile.save()
+            return HttpResponseRedirect('user_home')
+        else:
+            messages.info(request, f'{form.errors}')
+            return render(request, self.template_name, {'form': self.form_class})
+
+
+class UserHomeView(View):
     pass
